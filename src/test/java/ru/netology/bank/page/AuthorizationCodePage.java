@@ -28,10 +28,11 @@ public class AuthorizationCodePage {
         verifyButton.click();
     }
 
-    public void validVerify(DataHelper.VerificationCode code) {
+    public PersonalAccountPage validVerify(DataHelper.VerificationCode code) {
         enterCodeAndSubmit(code.getCode());
-        new PersonalAccountPage();
+        return new PersonalAccountPage();
     }
+
 
     public void invalidVerify(DataHelper.VerificationCode code) {
         enterCodeAndSubmit(code.getCode());

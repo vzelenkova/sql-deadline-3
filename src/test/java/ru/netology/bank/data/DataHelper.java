@@ -29,16 +29,10 @@ public class DataHelper {
     public static AuthInfo getAuthInfo() {
         return new AuthInfo("vasya", "qwerty123");
     }
-    public static AuthInfo getAuthInfoPasswordNoLogin() {
-        return new AuthInfo("", "qwerty123");
+    public static String getRandomPassword() {
+        return faker.internet().password();
     }
 
-    public static AuthInfo getFakeInfo() {
-        return new AuthInfo("vasya", faker.internet().password());
-    }
-    public static AuthInfo getFakePasswordInfoNoLogin() {
-        return new AuthInfo("", faker.internet().password());
-    }
     public static AuthInfo getFakeAuthInfo() {
         return new AuthInfo( faker.name().username(), faker.internet().password());
     }

@@ -33,7 +33,7 @@ public class LoginTest {
         verificationPage.verifyPageVisible();
         var code = SQLHelper.getVerificationCode(authInfo.getLogin());
         var verificationCode = new DataHelper.VerificationCode(code);
-        verificationPage.validVerify(verificationCode);
+        var dashboard = verificationPage.validVerify(verificationCode);
     }
 
     @Test
@@ -55,20 +55,26 @@ public class LoginTest {
 
     @Test
     public void wrongCredentials3Times() {
-        var authInfo = getAuthInfoPasswordNoLogin();
-        var authInfoFake = getFakeInfo();
-        var authInfoFakePassword = getFakePasswordInfoNoLogin();
-        loginPage.login(authInfo);
-        loginPage.verifyErrorNotificationVisibility();
-        loginPage.clearForm();
-        loginPage.login(authInfoFakePassword);
-        loginPage.verifyErrorNotificationVisibility();
-        loginPage.clearForm();
-        loginPage.login(authInfoFakePassword);
+        var validLogin = getAuthInfo().getLogin();
+
+        var wrongPassword1 = new AuthInfo(validLogin, getRandomPassword());
+        var wrongPassword2 = new AuthInfo(validLogin, getRandomPassword());
+        var wrongPassword3 = new AuthInfo(validLogin, getRandomPassword());
+
+        loginPage.login(wrongPassword1);
         loginPage.verifyErrorNotificationVisibility();
         loginPage.clearForm();
 
-        loginPage.login(authInfoFake);
+        loginPage.login(wrongPassword2);
         loginPage.verifyErrorNotificationVisibility();
+        loginPage.clearForm();
+
+        loginPage.login(wrongPassword3);
+        loginPage.verifyErrorNotificationVisibility();
+        loginPage.clearForm();
+
+        var correct = getAuthInfo();
+        loginPage.login(correct);
+        loginPage.verifyErrorNotificationVisibility(); // должен быть заблокирован
     }
 }

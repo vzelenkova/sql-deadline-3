@@ -12,4 +12,5 @@ public class PersonalAccountPage {
         SelenideElement heading = $("[data-test-id=dashboard]");
         heading.shouldBe(visible).shouldHave(text("Личный кабинет"));
     }
+
 }
