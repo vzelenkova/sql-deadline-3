@@ -23,15 +23,18 @@ public class AuthorizationCodePage {
         errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
     }
 
-    public void validVerify(DataHelper.VerificationCode verificationCode) {
-        codeField.setValue(verificationCode.getCode());
+    private void enterCodeAndSubmit(String code) {
+        codeField.setValue(code);
         verifyButton.click();
+    }
+
+    public void validVerify(DataHelper.VerificationCode code) {
+        enterCodeAndSubmit(code.getCode());
         new PersonalAccountPage();
     }
 
-    public void invalidVerify(DataHelper.VerificationCode verificationCode) {
-        codeField.setValue(verificationCode.getCode());
-        verifyButton.click();
-        errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
+    public void invalidVerify(DataHelper.VerificationCode code) {
+        enterCodeAndSubmit(code.getCode());
+        verifyErrorNotificationVisibility();
     }
 }

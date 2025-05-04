@@ -16,14 +16,14 @@ public class SQLHelper {
     private SQLHelper() {}
 
     private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db", "test_user", "test_password");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
     }
 
 
     public static String getVerificationCode(String login) {
     String code = null;
     String query = "SELECT code FROM auth_codes ac JOIN users u ON ac.user_id = u.id WHERE u.login = ? ORDER BY ac.created DESC LIMIT 1;";
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db", "test_user", "test_password");
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
         PreparedStatement stmt = conn.prepareStatement(query)) 
     {
         stmt.setString(1, login);
@@ -46,9 +46,5 @@ public class SQLHelper {
         runner.execute(connection, "DELETE FROM card_transactions");
         runner.execute(connection, "DELETE FROM cards");
         runner.execute(connection, "DELETE FROM users");
-    }
-    public static void cleanAuthCodes() throws SQLException {
-        var connection = getConn();
-        runner.execute(connection, "DELETE FROM auth_codes");
     }
 }

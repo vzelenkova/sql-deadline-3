@@ -25,37 +25,24 @@ public class LoginPage {
         loginField.shouldBe(visible);
     }
 
-    public AuthorizationCodePage validLogin(DataHelper.AuthInfo authInfo) {
-        loginField.setValue(authInfo.getLogin());
-        passwordField.setValue(authInfo.getPassword());
+    private void enterCredentials(String login, String password) {
+        loginField.setValue(login);
+        passwordField.setValue(password);
         loginButton.click();
+    }
+
+    public AuthorizationCodePage validLogin(DataHelper.AuthInfo authInfo) {
+        enterCredentials(authInfo.getLogin(), authInfo.getPassword());
         return new AuthorizationCodePage();
     }
 
     public void login(DataHelper.AuthInfo authInfo) {
-        loginField.setValue(authInfo.getLogin());
-        passwordField.setValue(authInfo.getPassword());
-        loginButton.click();
-        errorNotification.shouldBe(visible).shouldHave(text("Ошибка"));
+        enterCredentials(authInfo.getLogin(), authInfo.getPassword());
+        verifyErrorNotificationVisibility();
     }
-    
+
     public void clearForm() {
-        loginField.click();
-        while(!Objects.equals(loginField.getValue(), "")){
-            loginField.sendKeys(Keys.BACK_SPACE);
-        }
-        loginField.sendKeys(Keys.BACK_SPACE);
-        passwordField.click();
-        while(!Objects.equals(passwordField.getValue(), "")){
-            passwordField.sendKeys(Keys.BACK_SPACE);
-        }
-    }
-    
-    public void clearFormPassword() {
-        passwordField.click();
-        passwordField.sendKeys(Keys.SHIFT, Keys.HOME, Keys.BACK_SPACE);// можно удалить данные из поля таким способом
-//        while(!Objects.equals(passwordField.getValue(), "")){  // или таким, с помощью цикла while
-//            passwordField.sendKeys(Keys.BACK_SPACE);
-//        }
+        loginField.doubleClick().sendKeys(Keys.BACK_SPACE);
+        passwordField.doubleClick().sendKeys(Keys.BACK_SPACE);
     }
 }

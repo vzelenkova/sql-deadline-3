@@ -1,8 +1,6 @@
 package ru.netology.bank.test;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.bank.data.DataHelper;
 import ru.netology.bank.data.SQLHelper;
 import ru.netology.bank.page.LoginPage;
@@ -21,9 +19,10 @@ public class LoginTest {
         loginPage = open("http://localhost:9999/", LoginPage.class);
     }
 
-    @AfterEach
-    void cleanAuthCodes() throws SQLException {
-        SQLHelper.cleanAuthCodes();
+
+    @AfterAll
+    static void cleanup() {
+        SQLHelper.cleanDatabase();
     }
 
 
@@ -38,7 +37,6 @@ public class LoginTest {
     }
 
     @Test
-
     public void wrongCredentials() {
         var authInfo = getFakeAuthInfo();
         loginPage.login(authInfo);
@@ -60,17 +58,17 @@ public class LoginTest {
         var authInfo = getAuthInfoPasswordNoLogin();
         var authInfoFake = getFakeInfo();
         var authInfoFakePassword = getFakePasswordInfoNoLogin();
-        loginPage.login(authInfoFake);
-        loginPage.verifyErrorNotificationVisibility();
-        loginPage.clearFormPassword();
-        loginPage.login(authInfoFakePassword);
-        loginPage.verifyErrorNotificationVisibility();
-        loginPage.clearFormPassword();
-        loginPage.login(authInfoFakePassword);
-        loginPage.verifyErrorNotificationVisibility();
-        loginPage.clearFormPassword();
-
         loginPage.login(authInfo);
+        loginPage.verifyErrorNotificationVisibility();
+        loginPage.clearForm();
+        loginPage.login(authInfoFakePassword);
+        loginPage.verifyErrorNotificationVisibility();
+        loginPage.clearForm();
+        loginPage.login(authInfoFakePassword);
+        loginPage.verifyErrorNotificationVisibility();
+        loginPage.clearForm();
+
+        loginPage.login(authInfoFake);
         loginPage.verifyErrorNotificationVisibility();
     }
 }
